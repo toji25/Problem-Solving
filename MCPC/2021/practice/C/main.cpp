@@ -14,8 +14,8 @@ typedef vector<int> vi;
 // This function calculates the number of paths in a matrix avoiding kittens and considering buttons.
 int solve(int n, int m, int k, int l, vvb &kittens, vvb &buttons) {
     // Create two-dimensional arrays to store the number of paths to each cell in the matrix.
-    vvi dp(n, vi(m, 0)); // this stores the number of possible paths from cell (0, 0) to cell (i, j) with at least one pressed button
-    vvi raw(n, vi(m, 0)); // this stores the number of possible paths from cell (0, 0) to cell (i, j) without necessarily pressing a button
+    vvi raw(n, vi(m, 0)); // this stores the number of possible paths from cell (0, 0) to cell (i, j) (buttons_pressed >= 0)
+    vvi dp(n, vi(m, 0)); // this stores the number of valid paths from cell (0, 0) to cell (i, j) (buttons_pressed >= 1)
 
     // the number of paths from (0, 0) to (0, 0) is 1
     raw[0][0] = 1;
@@ -39,17 +39,19 @@ int solve(int n, int m, int k, int l, vvb &kittens, vvb &buttons) {
             // Also check if no buttons are in the field (then are paths are valid)
             if (buttons[i][j] || (l == 0)) {
                 dp[i][j] = raw[i][j];
-            } else {
-                // If the cell does not contain a button, then the number of valid paths to the cell 
-                // is the sum of the number of valid paths to the cell from the top
-                // and the number of valid paths to the cell from the left.
-                if (i != 0) dp[i][j] = (dp[i][j] + dp[i - 1][j]) % MOD;
-                if (j != 0) dp[i][j] = (dp[i][j] + dp[i][j - 1]) % MOD;
+                continue;
             }
+
+            // If the cell does not contain a button, then the number of valid paths to the cell 
+            // is the sum of the number of valid paths to the cell from the top
+            // and the number of valid paths to the cell from the left.
+            if (i != 0) dp[i][j] = (dp[i][j] + dp[i - 1][j]) % MOD;
+            if (j != 0) dp[i][j] = (dp[i][j] + dp[i][j - 1]) % MOD;
+            
         }
     }
 
-    // Return the number of paths to the bottom-right corner of the matrix.
+    // Return the number of valid paths to the bottom-right corner of the matrix.
     return dp[n - 1][m - 1];
 }
 
