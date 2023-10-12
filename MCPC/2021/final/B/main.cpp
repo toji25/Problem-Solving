@@ -6,22 +6,30 @@
 #include<vector>
 #include<stack>
 
+using namespace std;
+
 #define MOD 1'000'000'007
 #define min(a, b) (a < b ? a : b)
 #define max(a, b) (a > b ? a : b)
 
 
-using namespace std;
+typedef long long ll;
+typedef vector<int> vi;
+typedef vector<bool> vb;
+typedef vector<vector<int>> vvi;
+typedef vector<vector<bool>> vvb;
+
+
 
 
 void sccUtil(int u,
-             vector<vector<int>> &graph,
-             vector<int> &score,
+             vvi &graph,
+             vi &score,
              int &result,
              int &ways,
-             vector<int> &disc,
-             vector<int> &ancestor,
-             vector<bool> &inStack,
+             vi &disc,
+             vi &ancestor,
+             vb &inStack,
              stack<int> &stack,
              int &time
              ) {
@@ -56,25 +64,26 @@ void sccUtil(int u,
         inStack[w] = false;
     }
 
-    int two = 1;
+    ll two = 1;
     while (zeros--) two = (two << 1) % MOD;
 
     result += (sum > 0 ? sum : most);
 
+    ll tmp = ways;
     if (most == 0){
-        ways = (ways * (two - 1)) % MOD;
+        ways = static_cast<int>((tmp * (two - 1)) % MOD);
     } else {
-        ways = (ways * two) % MOD;
+        ways = static_cast<int>((tmp * two) % MOD);
     }
 
 }
 
 
-void scc(vector<vector<int>> graph, vector<int> &score, int n, int &result, int &ways) {
+void scc(vvi graph, vi &score, int n, int &result, int &ways) {
 
-    vector<int> disc(n, -1);
-    vector<int> ancestor(n, -1);
-    vector<bool> inStack(n, false);
+    vi disc(n, -1);
+    vi ancestor(n, -1);
+    vb inStack(n, false);
 
     stack<int> stack;
 
@@ -88,7 +97,7 @@ void scc(vector<vector<int>> graph, vector<int> &score, int n, int &result, int 
 }
 
 
-pair<int, int> solve(vector<vector<int>> &graph, vector<int> &score, int n) {
+pair<int, int> solve(vvi &graph, vi &score, int n) {
 
     int result = 0, ways = 1;
 
@@ -99,8 +108,7 @@ pair<int, int> solve(vector<vector<int>> &graph, vector<int> &score, int n) {
 }
 
 
-
-int main(){
+int main() {
 
     int t, n, m;
 
@@ -126,5 +134,4 @@ int main(){
 
         cout << answer.first << " " << answer.second << endl;
     }
-
 }
